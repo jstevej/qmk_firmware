@@ -3,6 +3,8 @@
 #pragma once
 
 #if RGBLIGHT_ENABLE
+#define RGBLIGHT_NAME_NUM_ANIMATIONS 43
+
 void dprintf_rgblight_mode(void);
-void rgblight_get_mode_name(uint8_t mode, size_t bufsize, char *buf);
+const char* rgblight_get_mode_name(uint8_t mode);
 #endif

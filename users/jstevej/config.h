@@ -11,20 +11,24 @@
 //
 // https://docs.qmk.fm/#/mod_tap
 // https://docs.qmk.fm/#/tap_hold?id=ignore-mod-tap-interrupt
+// https://docs.qmk.fm/#/tap_hold?id=hold-on-other-key-press
 // https://precondition.github.io/home-row-mods
+// https://docs.qmk.fm/#/ChangeLog/20230226
 // -------------------------------------------------------------------------------------------------
 
-#define IGNORE_MOD_TAP_INTERRUPT
+//#define IGNORE_MOD_TAP_INTERRUPT // deprecated in QMK 0.20.0 in favor of HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 //#define TAPPING_TERM 200 // not used; see per-key settings in get_tapping_term
 #define TAPPING_TERM_PER_KEY
-#define TAPPING_FORCE_HOLD
+//#define TAPPING_FORCE_HOLD // replaced by QUICK_TAP_TERM in QMK 0.20.0
 #define PERMISSIVE_HOLD
+#define QUICK_TAP_TERM 0
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 // -------------------------------------------------------------------------------------------------
 // Combos
 // -------------------------------------------------------------------------------------------------
 
-#define COMBO_COUNT 2
+#define COMBO_COUNT 5
 //#define COMBO_TERM 50 // default 50 ms
 
 // -------------------------------------------------------------------------------------------------

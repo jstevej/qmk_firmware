@@ -37,6 +37,12 @@ void print_info(uint8_t keymap_ver) {
     dprintf("CONSOLE_ENABLE = 0\n");
 #endif
 
+#ifdef ENCODER_ENABLE
+    dprintf("ENCODER_ENABLE = 1\n");
+#else
+    dprintf("ENCODER_ENABLE = 0\n");
+#endif
+
 #ifdef EXTRAKEY_ENABLE
     dprintf("EXTRAKEY_ENABLE = 1\n");
 #else
@@ -67,8 +73,16 @@ void print_info(uint8_t keymap_ver) {
     #endif
 
     dprintf("touchpad_init = %d\n", touchpad_init);
+
+    dprintf("pointing_device_get_cpi() = %d\n", pointing_device_get_cpi());
 #else
     dprintf("POINTING_DEVICE_ENABLE = 0\n");
+#endif
+
+#ifdef QUANTUM_PAINTER_ENABLE
+    dprintf("QUANTUM_PAINTER_ENABLE = 1\n");
+#else
+    dprintf("QUANTUM_PAINTER_ENABLE = 0\n");
 #endif
 
 #if RGBLIGHT_ENABLE

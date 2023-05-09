@@ -6,9 +6,7 @@
 
 // This code is based on keyboards/dmqdesign/spin/keymaps/gorbachev/keymaps.c.
 
-#define NUM_ANIMATIONS 43
-
-static const char *animation_names[NUM_ANIMATIONS] = {
+static const char *animation_names[RGBLIGHT_NAME_NUM_ANIMATIONS] = {
     "unknown",
     "static",
     "breathing 1",
@@ -56,11 +54,12 @@ static const char *animation_names[NUM_ANIMATIONS] = {
 
 void dprintf_rgblight_mode(void) {
     uint8_t mode = rgblight_get_mode();
-    if (mode >= NUM_ANIMATIONS) mode = 0;
+    if (mode >= RGBLIGHT_NAME_NUM_ANIMATIONS) mode = 0;
     dprintf("rgblight: %s\n", animation_names[mode]);
 }
 
-void rgblight_get_mode_name(uint8_t mode, size_t bufsize, char *buf) {
-    snprintf(buf, bufsize, "%-25s", animation_names[mode]);
+const char* rgblight_get_mode_name(uint8_t mode) {
+    //snprintf(buf, bufsize, "%-25s", animation_names[mode]);
+    return animation_names[mode];
 }
 #endif

@@ -1,21 +1,21 @@
-# Fidrildi 2.1
+# Fidrildi 3
 
-![Fidrildi 2.1 Picture](https://i.imgur.com/TODO.jpeg)
+![Fidrildi 3 Picture](https://i.imgur.com/TODO.jpeg)
 
 Fidrildi is a 34-key, ortholinear, butteryfly-shaped, unibody split keyboard inspired by [Reviung](https://github.com/gtips/reviung), [Corne](https://github.com/foostan/crkbd), and others.
 
 * Keyboard Maintainer: [Steve Joiner](https://github.com/jstevej)
 * Hardware Supported:
-  * Fidrildi 2.1
+  * Fidrildi 3
 * Hardware Availability: *Links to where you can find this hardware*
 
 Make example for this keyboard (after setting up your build environment):
 
-    make fidrildi/2_1:default
+    make fidrildi/v3:default
 
 Flashing example for this keyboard:
 
-    make fidrildi/2_1:default:flash
+    make fidrildi/v3:default:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 

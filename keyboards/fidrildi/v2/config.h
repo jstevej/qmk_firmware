@@ -40,10 +40,10 @@
 
 #define LCD_WIDTH 240 // custom
 #define LCD_HEIGHT 240 // custom
+#define LCD_BL_PIN GP20 // custom
 #define LCD_CS_PIN GP21 // custom
 #define LCD_DC_PIN GP4 // custom
 #define LCD_RST_PIN GP5 // custom
-//#define LCD_SPI_DIVISOR 4 // custom
 #define LCD_SPI_DIVISOR 4 // custom
 #define LCD_SPI_MODE 0 // custom
 
@@ -84,7 +84,7 @@
 // SPI
 // -------------------------------------------------------------------------------------------------
 
-//#define SPI_DRIVER SPID0
+#define SPI_DRIVER SPID0
 #define SPI_SCK_PIN GP22
 //#define SPI_SCK_PAL_MODE ?
 #define SPI_MOSI_PIN GP23

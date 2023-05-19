@@ -254,7 +254,7 @@ void housekeeping_task_user(void) {
 }
 #endif
 
-#if 0
+#if 1
 #include "source_sans_pro_18.qff.h"
 static painter_font_handle_t jstevej_font;
 #endif
@@ -269,7 +269,11 @@ void keyboard_post_init_user(void) {
     pointing_device_set_cpi(384);
 #endif
 
-#if QUANTUM_PAINTER_ENABLE && 0
+#if QUANTUM_PAINTER_ENABLE && 1
+#ifdef LCD_BL_PIN
+    setPinOutput(LCD_BL_PIN);
+    writePinHigh(LCD_BL_PIN);
+#endif
     display = qp_gc9a01_make_spi_device(
             LCD_WIDTH,
             LCD_HEIGHT,

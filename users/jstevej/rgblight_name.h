@@ -7,4 +7,5 @@
 
 void dprintf_rgblight_mode(void);
 const char* rgblight_get_mode_name(uint8_t mode);
+const char* rgblight_get_mode_name_short(uint8_t mode);
 #endif

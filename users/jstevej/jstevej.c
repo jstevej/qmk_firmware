@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 
+#include "my_layers.h"
 #include "rgblight_name.h"
 #include "print_info.h"
 
@@ -9,25 +10,15 @@
 
 #define JSTEVEJ_KEYMAP_VERSION 2
 
-#define UI_ENABLE 0 // QUANTUM_PAINTER_ENABLE
-
 #if QUANTUM_PAINTER_ENABLE
 painter_device_t display;
 #endif
 
-#if UI_ENABLE
+#if QUANTUM_PAINTER_ENABLE
 #include "ui.h"
 #endif
 
 #define BSPC_LEFT 0
-
-enum layers {
-    LY_BASE,
-    LY_LSYM,
-    LY_RSYM,
-    LY_LNUM,
-    LY_RNAV,
-};
 
 #define LSFT_Z LSFT_T(KC_Z)
 #define LALT_X LALT_T(KC_X)
@@ -168,15 +159,17 @@ bool caps_word_press_user(uint16_t keycode) {
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
         if (clockwise) {
-#if UI_ENABLE
+#if QUANTUM_PAINTER_ENABLE
             ui_register_rotate(true);
+#else
+            if (layer_state_is(LY_BASE)) tap_code(KC_KB_VOLUME_UP);
 #endif
-            tap_code(KC_KB_VOLUME_UP);
         } else {
-#if UI_ENABLE
+#if QUANTUM_PAINTER_ENABLE
             ui_register_rotate(false);
+#else
+            if (layer_state_is(LY_BASE)) tap_code(KC_KB_VOLUME_DOWN);
 #endif
-            tap_code(KC_KB_VOLUME_DOWN);
         }
     }
 
@@ -243,36 +236,26 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     return 200;
 }
 
-#if 0
-uint16_t debug_timer = 0;
-
+#if QUANTUM_PAINTER_ENABLE
 void housekeeping_task_user(void) {
-    if (debug_timer == 0 || timer_elapsed(debug_timer) > 3000) {
-        debug_timer = timer_read();
-        dprintf("tick\n");
-    }
+    ui_update_housekeeping();
 }
-#endif
-
-#if 1
-#include "source_sans_pro_18.qff.h"
-static painter_font_handle_t jstevej_font;
 #endif
 
 void keyboard_post_init_user(void) {
     debug_enable = true;
     //debug_matrix = true;
-    debug_keyboard = true;
-    debug_mouse = true;
+    //debug_keyboard = true;
+    //debug_mouse = true;
 
 #if POINTING_DEVICE_ENABLE
     pointing_device_set_cpi(384);
 #endif
 
-#if QUANTUM_PAINTER_ENABLE && 1
+#if QUANTUM_PAINTER_ENABLE
 #ifdef LCD_BL_PIN
     setPinOutput(LCD_BL_PIN);
-    writePinHigh(LCD_BL_PIN);
+    writePinLow(LCD_BL_PIN);
 #endif
     display = qp_gc9a01_make_spi_device(
             LCD_WIDTH,
@@ -288,61 +271,40 @@ void keyboard_post_init_user(void) {
     qp_clear(display);
     qp_flush(display);
 
-    jstevej_font = qp_load_font_mem(font_source_sans_pro_18);
-
     if (qp_lvgl_attach(display)) {
         dprintf("lvgl attached\n");
     } else {
         dprintf("failed attaching lvgl\n");
     }
 
-    //lv_disp_set_color_format(lv_scr_act(), LV_COLOR_FORMAT_NATIVE);
+    ui_init();
+    ui_update_layer(0);
 
-    lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex(0x003452), LV_PART_MAIN);
-    lv_obj_t *label = lv_label_create(lv_scr_act());
-    lv_label_set_text(label, "Hello, World!");
-    lv_obj_set_style_text_color(lv_scr_act(), lv_color_hex(0xffffff), LV_PART_MAIN);
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_bg_color(&style, lv_palette_main(LV_PALETTE_GREEN));
-    lv_style_set_arc_color(&style, lv_palette_main(LV_PALETTE_RED));
-    lv_style_set_arc_width(&style, 4);
-    lv_obj_t *arc = lv_slider_create(lv_scr_act());
-    lv_obj_add_style(arc, &style, 0);
-    lv_obj_center(arc);
-
-    //qp_rect(display, 0, 0, 119, 119, 85, 255, 255, true);
-    //qp_rect(display, 119, 0, 239, 119, 170, 255, 255, true);
-    //qp_rect(display, 0, 119, 119, 239, 0, 255, 255, true);
-    //qp_rect(display, 119, 119, 239, 239, 0, 0, 0, true);
-
-    //qp_flush(display);
-    //if (jstevej_font != NULL) {
-    //    dprintf("font loaded\n");
-    //    static const char *text = "Hello, World.";
-    //    //qp_drawtext_recolor(display, 125, 125, jstevej_font, text, 170, 255, 255, 0, 0, 0);
-    //    qp_drawtext(display, 125, 125, jstevej_font, text);
-    //} else {
-    //    dprintf("font is null\n");
-    //}
-
-    //qp_flush(display);
+#if LCD_BL_PIN
+    writePinHigh(LCD_BL_PIN);
 #endif
+#endif
+
 }
 
-#if POINTING_DEVICE_ENABLE
-layer_state_t layer_state_set_user(layer_state_t state) {
-    if (layer_state_cmp(state, LY_RNAV)) {
-        pointing_device_set_cpi(16); // TODO: make controllable with ui
-    } else {
-        pointing_device_set_cpi(384); // TODO: make controllable with ui
-    }
-
-    return state;
-}
-#endif
+//#if QUANTUM_PAINTER_ENABLE
+//layer_state_t layer_state_set_user(layer_state_t state) {
+//    if (state == 0) {
+//        ui_update_layer(0);
+//    } else {
+//        int i;
+//
+//        for (i = LY_NUM_LAYERS - 1; i >= 0; i--) {
+//            if (state & (1 << i)) {
+//                ui_update_layer(i);
+//                break;
+//            }
+//        }
+//    }
+//
+//    return state;
+//}
+//#endif
 
 #if ENCODER_ENABLE
 static uint8_t encoder_pressed = 0;
@@ -356,10 +318,9 @@ void matrix_scan_user(void) {
         encoder_pressed = false;
     } else {
         if (!encoder_pressed) {
-#if UI_ENABLE
+#if QUANTUM_PAINTER_ENABLE
             ui_register_press();
 #endif
-            dprintf("encoder: pressed\n");
         }
 
         encoder_pressed = true;
@@ -392,8 +353,6 @@ static jstevej_oneshot_state_t osrs_state = JSTEVEJ_ONESHOT_INACTIVE;
 //}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    dprintf("process_record_user: %d (%d)\n", keycode, record->event.pressed);
-
     if (osrs_state == JSTEVEJ_ONESHOT_LOADED && record->event.pressed) {
         osrs_state = JSTEVEJ_ONESHOT_TRIGGERED;
         layer_on(LY_RSYM);

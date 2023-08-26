@@ -6,6 +6,8 @@
 //#define NO_ACTION_TAPPING
 //#define NO_ACTION_ONESHOT
 
+//#define QUANTUM_PAINTER_DEBUG
+
 // -------------------------------------------------------------------------------------------------
 // Mod-tap settings for home row mods
 //
